@@ -1,0 +1,12 @@
+{
+    "name": "old/bfx-api",
+    "authors": [
+        {
+            "name": "Mykola Konovalov",
+            "email": "mykola.k@code-care.pro"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.3"
+    }
+}
