@@ -1,12 +1,30 @@
 {
-    "name": "old/bfx-api",
+    "name": "bfx/api-rest",
+    "description": "Official Bitfinex REST v2 API interface",
+    "keywords": [
+        "bitfinex",
+        "bfx",
+        "bitcoin",
+        "BTC"
+    ],
+    "homepage": "https://github.com/bitfinexcom/bitfinex-api-php",
+    "type": "library",
+    "license": "MIT",
+
     "authors": [
         {
             "name": "Mykola Konovalov",
             "email": "mykola.k@code-care.pro"
         }
     ],
+
     "require": {
         "guzzlehttp/guzzle": "^7.3"
-    }
+    },
+
+    "autoload": {
+        "psr-4": {"BFX\\": "src/"}
+    },
+
 }
+
