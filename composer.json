@@ -19,12 +19,22 @@
     ],
 
     "require": {
-        "guzzlehttp/guzzle": "^7.3"
+        "php": "^7.2.5 || ^8.0",
+        "ext-json": "*",
+        "guzzlehttp/promises": "^1.5",
+        "guzzlehttp/psr7": "^1.8.3 || ^2.1",
+        "guzzlehttp/guzzle": "^7.3",
+        "php-cs-fixer/vendor/php-cs-fixer/diff": "^3.1"
     },
 
     "autoload": {
-        "psr-4": {"BFX\\": "src/"}
+        "psr-4": {
+            "BFX\\": "src/",
+            "PhpCsFixer\\": "tools/php-cs-fixer"
+        }
     },
 
+    "bin": [
+        "php-cs-fixer"
+    ]
 }
-

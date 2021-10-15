@@ -9,29 +9,38 @@ namespace BFX;
  */
 class RESTv2
 {
-    private $url;
-    private $apiKey;
-    private $apiSecret;
-    private $authToken;
-    private $company;
-    private $transform;
-    private $agent;
-    private $affCode;
+    protected $url;
+    protected $apiKey;
+    protected $apiSecret;
+    protected $authToken;
+    protected $company;
+    protected $transform;
+    protected $agent;
+    protected $affCode;
 
     /**
      * RESTv2 constructor.
-     * @param null $affCode
-     * @param string $apiKey
-     * @param string $apiSecret
-     * @param string $authToken
+     *
+     * @param string $apiKey - API key
+     * @param string $apiSecret - API secret
+     * @param string $authToken - optional auth option
+     * @param string $apiUrl - endpoint URL
+     * @param boolean $transform
+     * @param [string] $affCode - affiliate code to be applied to all orders
      * @param string $company
-     * @param string $API_URL
-     * @param false $transform
-     * @param null $agent
+     * @param [string] $agent - optional user agent
      */
-    public function __construct($affCode = null, $apiKey = '', $apiSecret = '', $authToken = '', $company = '', $API_URL = '', $transform = false, $agent = null)
-    {
-        $this->url = $API_URL;
+    public function __construct(
+        $affCode = '',
+        $apiKey = '',
+        $apiSecret = '',
+        $authToken = '',
+        $company = '',
+        $apiUrl = '',
+        $transform = false,
+        $agent = ''
+    ) {
+        $this->url = $apiUrl;
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
         $this->authToken =  $authToken;
@@ -40,21 +49,25 @@ class RESTv2
         $this->agent = $agent;
         $this->affCode = $affCode;
 
-        $baseUrl = $this->url;
-        $this->client = new GuzzleHttp\Client([
-            'base_uri' => $baseUrl,
+        if ($this->agent) {
+            $this->client->setUserAgent($this->agent);
+        }
+        $this->client = new \GuzzleHttp\Client([
+            'base_uri' => $this->url,
             'timeout' => 3.0,
         ]);
     }
 
     /**
-     * @param $path
-     * @param $payload
-     * @param $transformer
+     * @param string $path    - Api endpoint
+     * @param mixed  $payload - Request body
+     * @param [mixed] $transformer - Response transform function
+     *
      * @return mixed
+     *
      * @throws \Exception
      */
-    public function makeAuthRequest($path, $payload, $transformer)
+    public function makeAuthRequest(string $path, $payload, $transformer = null)
     {
         if ((!$this->apiKey || !$this->apiSecret) && !$this->authToken) {
             throw new \Exception('missing api key or secret');
@@ -63,16 +76,13 @@ class RESTv2
         $bodyJson = json_encode($payload, JSON_UNESCAPED_SLASHES);
 
         $nonce = (string) (time() * 1000 * 1000);
-        $signature = "{$path}{$nonce}{$bodyJson}";
-
-        $sig = hash_hmac('sha384', $signature, $this->apiSecret);
 
         $headers = [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'bfx-nonce' => $nonce,
             'bfx-apikey' => $this->apiKey,
-            'bfx-signature' => $sig,
+            'bfx-token' => $this->authToken,
         ];
 
         $response = $this->client->post($path, [
@@ -86,11 +96,12 @@ class RESTv2
     }
 
     /**
-     * @param $path
-     * @param $transformer
+     * @param string $path - Api endpoint
+     * @param [mixed] $transformer - Response transform function
+     *
      * @return mixed
      */
-    public function makePublicRequest($path, $transformer)
+    public function makePublicRequest(string $path, $body, $transformer = null)
     {
         $response = $this->client->get($path);
 
@@ -100,12 +111,12 @@ class RESTv2
     }
 
     /**
-     * @param $path
-     * @param $body
-     * @param $transformer
+     * @param string $path    - Api endpoint
+     * @param [mixed] $transformer - Response transform function
+     *
      * @return mixed
      */
-    public function makePublicPostRequest($path, $body, $transformer)
+    public function makePublicPostRequest(string $path, $body, $transformer = null)
     {
         $headers = [
             'Content-Type' => 'application/json',
@@ -121,4 +132,42 @@ class RESTv2
 
         return json_decode($response);
     }
+
+    /**
+     * @param $data - data
+     * @param [mixed] $transformer - Response transform function
+     */
+    public function response ($data, $transformer) {
+        try {
+            $res = ($this->transform) ? $this->doTransform($data, $transformer): $data;
+            return $this->$res;
+        } catch (\Throwable $ex) {
+            return $this->$ex;
+        }
+    }
+
+    public function doTransform ($data, $transformer)
+    {
+        if (isClass($transformer)) {
+            return $this->classTransform($data, $transformer);
+        } else {
+            return $data;
+        }
+
+    }
+/**
+ * @param $data - data
+ * @param RESTv2 - class
+ * @private
+ */
+    public function classTransform ($data) {
+        if (!$data || $data === 0) return [];
+        if (!$this->transform) return $data;
+
+        if (is_array($data[0])) {
+            return $data = array_map($row, new RESTv2($row, $this));
+        }
+
+        return new RESTv2($data, $this);
+      }
 }
