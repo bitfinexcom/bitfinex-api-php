@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace BFX;
 
+use BFX\models\AuthPermission;
+use BFX\models\LedgerEntry;
+use BFX\models\Movement;
+use BFX\models\Notification;
+use BFX\models\UserInfo;
+
 /**
  * Communicates with v2 of the Bitfinex HTTP API
  */
@@ -18,18 +24,7 @@ class RESTv2
     protected $agent;
     protected $affCode;
 
-    /**
-     * RESTv2 constructor.
-     *
-     * @param string $apiKey - API key
-     * @param string $apiSecret - API secret
-     * @param string $authToken - optional auth option
-     * @param string $apiUrl - endpoint URL
-     * @param boolean $transform
-     * @param [string] $affCode - affiliate code to be applied to all orders
-     * @param string $company
-     * @param [string] $agent - optional user agent
-     */
+
     public function __construct(
         $affCode = '',
         $apiKey = '',
@@ -111,7 +106,7 @@ class RESTv2
     }
 
     /**
-     * @param string $path    - Api endpoint
+     * @param string $path - Api endpoint
      * @param [mixed] $transformer - Response transform function
      *
      * @return mixed
@@ -137,37 +132,163 @@ class RESTv2
      * @param $data - data
      * @param [mixed] $transformer - Response transform function
      */
-    public function response ($data, $transformer) {
+    public function response($data, $transformer)
+    {
         try {
-            $res = ($this->transform) ? $this->doTransform($data, $transformer): $data;
+            $res = ($this->transform) ? $this->doTransform($data, $transformer) : $data;
             return $this->$res;
         } catch (\Throwable $ex) {
             return $this->$ex;
         }
     }
 
-    public function doTransform ($data, $transformer)
+
+    /**
+     * @param $data - data
+     * @param [mixed] $transformer - Response transform function
+     */
+    public function doTransform($data, $transformer)
     {
-        if (isClass($transformer)) {
+        if ($transformer !== null) {
             return $this->classTransform($data, $transformer);
         } else {
             return $data;
         }
-
     }
-/**
- * @param $data - data
- * @param RESTv2 - class
- * @private
- */
-    public function classTransform ($data) {
-        if (!$data || $data === 0) return [];
-        if (!$this->transform) return $data;
 
-        if (is_array($data[0])) {
-            return $data = array_map($row, new RESTv2($row, $this));
+    /**
+     * @param $data - data
+     * @param [mixed] $transformer - Response transform function
+     */
+    public function classTransform($data, $transformer)
+    {
+        if (!$data || $data === 0) {
+            return [];
+        }
+        if (!$this->transform) {
+            return $data;
         }
 
-        return new RESTv2($data, $this);
-      }
+        if (is_array($data[0])) {
+            return array_map(function ($row) use ($transformer) {
+                return $transformer::{'unserialize'}($row);
+            }, $data);
+        }
+
+        return $transformer::{'unserialize'}($data);
+    }
+
+    /**
+     * @see https://docs.bitfinex.com/v2/reference#rest-public-platform-status
+     */
+    public function status()
+    {
+        return $this->makePublicRequest('/platform/status');
+    }
+
+    /**
+     * @see https://docs.bitfinex.com/reference#rest-auth-info-user
+     */
+    public function userInfo()
+    {
+        return $this->makePublicRequest('/auth/r/info/user', [], UserInfo::class);
+    }
+
+    /**
+     * @param $ccy - i.e. ETH
+     * @param $start - query start
+     * @param $end - query end
+     * @param $limit - query limit, default 25
+     * @see https://docs.bitfinex.com/v2/reference#movements
+     */
+    public function movements($ccy, $start = null, $end, $limit = 25)
+    {
+        $end = date();
+        $url = $ccy ? `/auth/r/movements/{$ccy}/hist` : '/auth/r/movements/hist';
+
+        return $this->makeAuthRequest($url, [ $start, $end, $limit ], Movement::class);
+    }
+
+    /**
+     * @param $category - category
+     * @param $ccy - i.e. ETH
+     * @param $start - query start
+     * @param $end - query end
+     * @param $limit - query limit, default 25
+     * @see https://docs.bitfinex.com/v2/reference#ledgers
+     */
+    public function ledgers($category, $ccy, $start = null, $end, $limit = 25)
+    {
+        $end = date();
+
+        $url = $ccy ? `/auth/r/ledgers/{$ccy}/hist` : '/auth/r/ledgers/hist';
+
+        return $this->makeAuthRequest($url, [$start, $end, $limit, $category], LedgerEntry::class);
+    }
+
+    /**
+     * Fetch the permissions of the key or token being used to generate this request
+     */
+    public function keyPermissions()
+    {
+        return $this->makeAuthRequest('/auth/r/permissions', [], AuthPermission::class);
+    }
+
+    /**
+     * @param $opts - options
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function generateToken($opts)
+    {
+        if (!$opts->scope) {
+            throw new \Exception('missing api key or secret');
+        }
+
+        return $this->makeAuthRequest('/auth/w/token', $opts);
+    }
+
+    /**
+     * @param $params - parameters
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getDepositAddress($params)
+    {
+        $params->op_renew = $params->opRenew;
+        return $this->makeAuthRequest('/auth/w/deposit/address', $params, Notification::class);
+    }
+
+    /**
+     * @param $params - parameters
+     * @return mixed
+     * @throws \Exception
+     */
+    public function withdraw($params)
+    {
+        return $this->makeAuthRequest('/auth/w/withdraw', $params, Notification::class);
+    }
+
+    /**
+     * @param $params - invoice parameters
+     * @return mixed
+     * @throws \Exception
+     * @see https://docs.bitfinex.com/reference#submit-invoice
+     */
+    public function payInvoiceCreate($params)
+    {
+        return $this->makeAuthRequest('/auth/w/ext/pay/invoice/create', $params);
+    }
+
+    /**
+     * @param $params - query parameters
+     * @return mixed
+     * @throws \Exception
+     * @see https://docs.bitfinex.com/reference#invoice-list
+     */
+    public function payInvoiceList($params)
+    {
+        return $this->makeAuthRequest('/auth/r/ext/pay/invoices', $params);
+    }
 }
