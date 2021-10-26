@@ -7,32 +7,31 @@ namespace BFX\models;
  */
 class UserInfo
 {
-    private $id;
-    private $email;
-    private $username;
-    private $timezone;
-    private $isPaperTradeEnabled;
+    protected $id;
+    protected $email;
+    protected $username;
+    protected $timezone;
+    protected $isPaperTradeEnabled;
 
     /**
-     * @param {object|Array} $data - user info data
-     * @param {number} $data['id'] - id
-     * @param {string} $data['email'] - email
-     * @param {string} $data['username'] - username
-     * @param {number} $data['timezone'] - timezone as UTC offset
-     * @param {number} $data['isPaperTradeEnabled'] - flag indicating paper trading account
+     * @param object $data - user info data
+     * @param numeric $data['id'] - id
+     * @param string $data['email'] - email
+     * @param string $data['username'] - username
+     * @param numeric $data['timezone'] - timezone as UTC offset
+     * @param numeric $data['isPaperTradeEnabled'] - flag indicating paper trading account
      */
     public function __construct($data = [])
     {
-        $this->id = $data['id'];
-        $this->email = $data['email'];
-        $this->username = $data['username'];
-        $this->timezone = $data['timezone'];
-        $this->isPaperTradeEnabled = $data['isPaperTradeEnabled'];
+        $this->id = $data[0];
+        $this->email = $data[1];
+        $this->username = $data[2];
+        $this->timezone = $data[7];
+        $this->isPaperTradeEnabled = $data[21];
     }
 
     /**
-     * @param {object[]|object|Array[]|Array} $data - data to convert to POJO
-     * @returns {object} pojo
+     * @param object $data - data to convert to POJO
      */
     public static function unserialize($data)
     {

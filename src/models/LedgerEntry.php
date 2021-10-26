@@ -4,46 +4,41 @@ namespace BFX\models;
 
 class LedgerEntry
 {
-    private $id;
-    private $currency;
-    private $currencyName;
-    private $mts;
-    private $amount;
-    private $balance;
-    private $description;
-    private $wallet;
+    protected $id;
+    protected $currency;
+    protected $mts;
+    protected $amount;
+    protected $balance;
+    protected $description;
+    protected $wallet;
 
     /**
-     * @param {object|Array} data - ledger entry data
-     * @param {number} $data['id'] - id
-     * @param {string} $data['currency'] - currency
-     * @param {number} $data['mts'] - transaction timestamp
-     * @param {number} $ata['amount'] - transaction amount
-     * @param {number} $data['balance'] - balance at time of transaction
-     * @param {string} $data['description'] - transaction description
+     * @param object data - ledger entry data
+     * @param numeric $data['id'] - id
+     * @param string $data['currency'] - currency
+     * @param numeric $data['mts'] - transaction timestamp
+     * @param numeric $ata['amount'] - transaction amount
+     * @param numeric $data['balance'] - balance at time of transaction
+     * @param string $data['description'] - transaction description
      */
     public function __construct($data = [])
     {
-        $this->id = $data['id'];
-        $this->currency = $data['currency'];
-        $this->currencyName = $data['currencyName'];
-        $this->mts = $data['mts'];
-        $this->amount = $data['amount'];
-        $this->balance = $data['balance'];
-        $this->description = $data['description'];
-        $this->wallet = $data['wallet'];
+        $this->id = $data[0];
+        $this->currency = $data[1];
+        $this->mts = $data[3];
+        $this->amount = $data[5];
+        $this->balance = $data[6];
+        $this->description = $data[8];
+        $this->wallet = null;
 
-        $this->$wallet = null;
-
-        if (is_string($this->$description) && !empty($this->$description)) {
-            $spl = $this->$description.str_split('wallet');
-            $this->$wallet = ($spl && strlen($spl) > 1) ? $spl[strlen($spl) - 1].trim() : null;
+        if (is_string($this->description) && !empty($this->description)) {
+            $spl = $this->description.str_split('wallet');
+            $this->wallet = ($spl && strlen($spl) > 1) ? $spl[strlen($spl) - 1].trim() : null;
         }
     }
 
     /**
-     * @param {object[]|object|Array[]|Array} $data - data to convert to POJO
-     * @returns {object} pojo
+     * @param object $data - data to convert to POJO
      */
     public static function unserialize($data)
     {

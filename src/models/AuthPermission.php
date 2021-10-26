@@ -4,34 +4,29 @@ namespace BFX\models;
 
 class AuthPermission
 {
-    private $key;
-    private $read;
-    private $write;
+    protected $key;
+    protected $read;
+    protected $write;
 
     /**
-     * @param {object|Array} $data - user info data
-     * @param {number} $data['id'] - id
-     * @param {string} $data['email'] - email
-     * @param {string} $data['username'] - username
-     * @param {number} $data['timezone'] - timezone as UTC offset
-     * @param {number} $data['isPaperTradeEnabled'] - flag indicating paper trading account
+     * @param object $data - auth permission data
+     * @param string $data.key - operation key
+     * @param boolean $data.read - read permission
+     * @param boolean $data.write - write permission
      */
     public function __construct($data = [])
     {
-        $this->key = $data['key'];
-        $this->read = $data['read'];
-        $this->write = $data['write'];
-        $this->read = $data['read'];
-        $this->write = $data['write'];
+        $this->key = $data[0];
+        $this->read = $data[1];
+        $this->write = $data[2];
     }
 
     /**
-     * @param {object[]|object|Array[]|Array} $data - data to convert to POJO
-     * @returns {object} pojo
+     * @param object$data - data to convert to POJO
      */
     public static function unserialize($data)
     {
-        return new Movement($data);
+        return new AuthPermission($data);
     }
 
     /**

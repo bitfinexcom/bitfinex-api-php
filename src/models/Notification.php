@@ -4,36 +4,35 @@ namespace BFX\models;
 
 class Notification
 {
-    private $mts;
-    private $type;
-    private $messageID;
-    private $notifyInfo;
-    private $code;
-    private $status;
-    private $text;
+    protected $mts;
+    protected $type;
+    protected $messageID;
+    protected $notifyInfo;
+    protected $code;
+    protected $status;
+    protected $text;
 
     /**
-     * @param {object|Array} $data - user info data
-     * @param {number} $data['id'] - id
-     * @param {string} $data['email'] - email
-     * @param {string} $data['username'] - username
-     * @param {number} $data['timezone'] - timezone as UTC offset
-     * @param {number} $data['isPaperTradeEnabled'] - flag indicating paper trading account
+     * @param object $data - user info data
+     * @param numeric $data['id'] - id
+     * @param string $data['email'] - email
+     * @param string $data['username'] - username
+     * @param numeric $data['timezone'] - timezone as UTC offset
+     * @param numeric $data['isPaperTradeEnabled'] - flag indicating paper trading account
      */
     public function __construct($data = [])
     {
-        $this->mts = $data['mts'];
-        $this->type = $data['type'];
-        $this->messageID = $data['messageID'];
-        $this->notifyInfo = $data['notifyInfo'];
-        $this->code = $data['code'];
-        $this->status = $data['status'];
-        $this->text = $data['text'];
+        $this->mts = $data[0];
+        $this->type = $data[1];
+        $this->messageID = $data[2];
+        $this->notifyInfo = $data[4];
+        $this->code = $data[5];
+        $this->status = $data[6];
+        $this->text = $data[7];
     }
 
     /**
-     * @param {object[]|object|Array[]|Array} $data - data to convert to POJO
-     * @returns {object} pojo
+     * @param object $data - data to convert to POJO
      */
     public static function unserialize($data)
     {
