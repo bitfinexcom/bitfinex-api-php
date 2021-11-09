@@ -1,6 +1,6 @@
 <?php
 
-namespace BFX\models;
+namespace BFX\Models;
 
 /**
  * User Info model

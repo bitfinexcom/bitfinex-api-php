@@ -1,6 +1,6 @@
 <?php
 
-namespace BFX\models;
+namespace BFX\Models;
 
 class Notification
 {
@@ -14,12 +14,15 @@ class Notification
 
     /**
      * @param object $data - user info data
-     * @param numeric $data['id'] - id
-     * @param string $data['email'] - email
-     * @param string $data['username'] - username
-     * @param numeric $data['timezone'] - timezone as UTC offset
-     * @param numeric $data['isPaperTradeEnabled'] - flag indicating paper trading account
+     * @param numeric $data['mts'] - timestamp
+     * @param string $data['type'] - (i.e. 'ucm-*' for broadcasts)
+     * @param numeric $data['messageID'] - message ID
+     * @param object $data['notifyInfo'] - metadata, set by client for broadcasts
+     * @param numeric $data['code '] - code
+     * @param string $data['status'] - status (i.e. 'error')
+     * @param string $data['text'] - notification text to display to user
      */
+
     public function __construct($data = [])
     {
         $this->mts = $data[0];

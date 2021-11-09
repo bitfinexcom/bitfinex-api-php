@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace BFX;
 
-use BFX\models\AuthPermission;
-use BFX\models\LedgerEntry;
-use BFX\models\Movement;
-use BFX\models\Notification;
-use BFX\models\UserInfo;
+use BFX\Models\AuthPermission;
+use BFX\Models\LedgerEntry;
+use BFX\Models\Movement;
+use BFX\Models\Notification;
+use BFX\Models\UserInfo;
+use GuzzleHttp\Client;
 
 /**
  * Communicates with v2 of the Bitfinex HTTP API
  */
 class RESTv2
 {
-    protected \GuzzleHttp\Client $client;
+    protected Client $client;
     protected string $apiUrl;
     protected string $apiKey;
     protected string $apiSecret;
@@ -29,7 +30,7 @@ class RESTv2
         string $apiKey = '',
         string $apiSecret = '',
         string $authToken = '',
-        string $apiUrl = '',
+        string $apiUrl = 'https://api.bitfinex.com',
         string $company = '',
         bool $transform = false,
         ?string $affCode = null,
@@ -44,7 +45,7 @@ class RESTv2
         $this->agent = $agent;
         $this->affCode = $affCode;
 
-        $this->client = new \GuzzleHttp\Client([
+        $this->client = new Client([
             'base_uri' => $this->apiUrl,
             'timeout' => 3.0,
         ]);
@@ -69,6 +70,8 @@ class RESTv2
             throw new \Exception('missing api key or secret');
         }
 
+        $path = '/v2'.$path;
+
         $bodyJson = json_encode($payload, JSON_UNESCAPED_SLASHES);
 
         $headers = [
@@ -80,7 +83,7 @@ class RESTv2
             $headers['bfx-token'] = $this->authToken;
         } else {
             $nonce = (string) (time() * 1000 * 1000);
-            $signature = "{$path}{$nonce}{$bodyJson}";
+            $signature = "/api{$path}{$nonce}{$bodyJson}";
 
             $sig = hash_hmac('sha384', $signature, $this->apiSecret);
             $headers['bfx-nonce'] = $nonce;
@@ -127,7 +130,7 @@ class RESTv2
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ];
-        $bodyJson = json_encode($body);
+        $bodyJson = json_encode($body, JSON_UNESCAPED_SLASHES);
         $response = $this->client->post($path, [
             'headers' => $headers,
             'body' => $bodyJson,
@@ -189,7 +192,7 @@ class RESTv2
      */
     public function status()
     {
-        return $this->makePublicRequest('/platform/status');
+        return $this->makePublicRequest('v2/platform/status');
     }
 
     /**
@@ -214,7 +217,13 @@ class RESTv2
         }
         $url = $ccy ? "/auth/r/movements/$ccy/hist" : '/auth/r/movements/hist';
 
-        return $this->makeAuthRequest($url, [$start, $end, $limit], Movement::class);
+        $payload = [
+            'start' => $start,
+            'end' => $end,
+            'limit' => $limit,
+        ];
+
+        return $this->makeAuthRequest($url, $payload, Movement::class);
     }
 
     /**
@@ -263,7 +272,7 @@ class RESTv2
     public function generateToken($opts)
     {
         $params = array_filter(
-            $opts,
+            (array)$opts,
             function ($key) {
                 return in_array($key, ['ttl', 'scope', 'caps', 'writePermission', '_cust_ip']);
             },
@@ -273,10 +282,10 @@ class RESTv2
             return !is_null($value);
         });
         if (!$params['scope']) {
-            throw new \Exception('missing api key or secret');
+            throw new \Exception('scope param is required');
         }
 
-        return $this->makeAuthRequest('/auth/w/token', $opts);
+        return $this->makeAuthRequest('/auth/w/token', $opts, $params);
     }
 
     /**

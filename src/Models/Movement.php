@@ -1,6 +1,6 @@
 <?php
 
-namespace BFX\models;
+namespace BFX\Models;
 
 class Movement
 {
@@ -36,7 +36,7 @@ class Movement
         $this->currency = $data[1];
         $this->currencyName = $data[2];
         $this->mtsStarted = $data[5];
-        $this->mtsUpdated = [6];
+        $this->mtsUpdated = $data[6];
         $this->status = $data[9];
         $this->amount = $data[12];
         $this->fees = $data[13];

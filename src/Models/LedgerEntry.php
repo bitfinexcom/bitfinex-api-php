@@ -1,6 +1,6 @@
 <?php
 
-namespace BFX\models;
+namespace BFX\Models;
 
 class LedgerEntry
 {
@@ -32,8 +32,8 @@ class LedgerEntry
         $this->wallet = null;
 
         if (is_string($this->description) && !empty($this->description)) {
-            $spl = $this->description.str_split('wallet');
-            $this->wallet = ($spl && strlen($spl) > 1) ? $spl[strlen($spl) - 1].trim() : null;
+            $spl = explode('wallet', $this->description);
+            $this->wallet = ($spl && count($spl) > 1) ? trim($spl[count($spl) - 1]) : null;
         }
     }
 
@@ -59,14 +59,6 @@ class LedgerEntry
     public function getCurrency()
     {
         return $this->currency;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCurrencyName()
-    {
-        return $this->currencyName;
     }
 
     /**

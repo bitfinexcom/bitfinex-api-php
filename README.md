@@ -13,4 +13,3 @@
 
 Documentation at [https://docs.bitfinex.com/v2/reference](https://docs.bitfinex.com/v2/reference)
 
-[See `docs/`](/docs) for PHPDoc generated documentation of available methods
