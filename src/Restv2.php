@@ -34,7 +34,8 @@ class RESTv2
         string $company = '',
         bool $transform = false,
         ?string $affCode = null,
-        ?string $agent = null
+        ?string $agent = null,
+        ?Client $client = null
     ) {
         $this->apiUrl = $apiUrl;
         $this->apiKey = $apiKey;
@@ -45,10 +46,14 @@ class RESTv2
         $this->agent = $agent;
         $this->affCode = $affCode;
 
-        $this->client = new Client([
-            'base_uri' => $this->apiUrl,
-            'timeout' => 3.0,
-        ]);
+        if ($client === null) {
+            $this->client = new Client([
+                'base_uri' => $this->apiUrl,
+                'timeout' => 3.0,
+            ]);
+        } else {
+            $this->client = $client;
+        }
 
         if ($this->agent) {
             $this->client->setUserAgent($this->agent);
@@ -156,7 +161,7 @@ class RESTv2
      */
     protected function doTransform($data, $transformer)
     {
-        if (class_exists($transformer)) {
+        if ($transformer !== null && class_exists($transformer)) {
             return $this->classTransform($data, $transformer);
         } elseif (is_callable($transformer)) {
             return $transformer($data);

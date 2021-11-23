@@ -17,8 +17,8 @@ class AuthPermission
     public function __construct($data = [])
     {
         $this->key = $data[0];
-        $this->read = $data[1];
-        $this->write = $data[2];
+        $this->read = $data[1] === 1;
+        $this->write = $data[2] === 1;
     }
 
     /**

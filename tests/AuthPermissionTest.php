@@ -9,16 +9,12 @@ class AuthPermissionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->authpermission = new AuthPermission([
-            0 => 'test123',
-            1 => true,
-            2 => false,
-        ]);
+        $this->authpermission = new AuthPermission(['test123', 1, 0]);
     }
 
     public function testKey()
     {
-        $this->assertEquals('test123', $this->authpermission->getKey());
+        $this->assertSame('test123', $this->authpermission->getKey());
     }
 
     public function testRead()

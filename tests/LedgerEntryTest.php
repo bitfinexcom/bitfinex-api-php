@@ -15,7 +15,7 @@ class LedgerEntryTest extends TestCase
             3 => 1573521810000,
             5 => 0.01644445,
             6 => 0,
-            8 => 'description',
+            8 => 'Settlement @ 185.79 on wallet margin',
         ]);
     }
 
@@ -46,6 +46,11 @@ class LedgerEntryTest extends TestCase
 
     public function testDescription()
     {
-        $this->assertEquals('description', $this->ledger->getDescription());
+        $this->assertEquals('Settlement @ 185.79 on wallet margin', $this->ledger->getDescription());
+    }
+
+    public function testGetWallet()
+    {
+        $this->assertEquals('margin', $this->ledger->getWallet());
     }
 }
