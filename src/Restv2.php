@@ -290,7 +290,7 @@ class RESTv2
             throw new \Exception('scope param is required');
         }
 
-        return $this->makeAuthRequest('/auth/w/token', $opts, $params);
+        return $this->makeAuthRequest('/auth/w/token', $params);
     }
 
     /**
