@@ -10,6 +10,27 @@
   composer require bitfinex-api-php
 ```
 
+## Usage
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+use BFX\RESTv2;
+
+$restV2 = new RESTv2([
+  'apiKey' => '...',
+  'apiSecret' => '...',
+  'transform' => true
+]);
+
+try {
+  $res = $restV2->userInfo();
+  print_r($res);
+} catch (\Throwable $ex) {
+  var_dump($ex->getMessage());
+}
+```
+
 ## Testing
 ```bash
 composer run-script test
