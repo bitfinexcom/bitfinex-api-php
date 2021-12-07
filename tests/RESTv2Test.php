@@ -18,7 +18,12 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'transform' => true,
+            'client' => $client
+        ]);
         $status = $rest2->status();
 
         $this->assertEquals(1, $status[0]);
@@ -32,7 +37,12 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'transform' => true,
+            'client' => $client
+        ]);
         $userinfo = $rest2->userInfo();
 
         $this->assertEquals('12345', $userinfo->getId());
@@ -50,7 +60,12 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'transform' => true,
+            'client' => $client
+        ]);
         $movements = $rest2->movements(null, 1169348774000, 2569348774009);
         $this->assertEquals('13105603', $movements[0]->getId());
     }
@@ -63,7 +78,12 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'transform' => true,
+            'client' => $client
+        ]);
         $ledgers = $rest2->ledgers(null, null, 1569348774000, 1569348774009)[0];
 
         $this->assertEquals('2531822314', $ledgers->getId());
@@ -82,7 +102,12 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'transform' => true,
+            'client' => $client
+        ]);
         $keyPermission = $rest2->keyPermissions();
 
         $this->assertEquals('account', $keyPermission[0]->getKey());
@@ -98,7 +123,12 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'transform' => true,
+            'client' => $client
+        ]);
         $depositAddress = $rest2->getDepositAddress(['opRenew'=>0]);
 
         $this->assertEquals('1637603347308', $depositAddress->getMts());
@@ -114,7 +144,11 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', false, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'client' => $client
+        ]);
         $generateToken = $rest2->generateToken(['scope'=>'api']);
 
         $this->assertEquals('pub:api:2d83311f-ff68-42b1-9dce-fbba53bced21-read', $generateToken[0]);
@@ -128,7 +162,12 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'transform' => true,
+            'client' => $client
+        ]);
         $withdraw = $rest2->withdraw('');
 
         $this->assertEquals('1568742390999', $withdraw->getMts());
@@ -145,7 +184,12 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'transform' => true,
+            'client' => $client
+        ]);
         $payInvoiceCreate = $rest2->payInvoiceCreate([]);
 
         $this->assertEquals('a6761c8b-468f-40ad-a522-cc5e41c39757', $payInvoiceCreate->id);
@@ -159,7 +203,12 @@ class RESTv2Test extends TestCase
             $historyContainer
         );
 
-        $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
+        $rest2 = new RESTv2([
+            'apiKey' => 'test',
+            'apiSecret' => 'test',
+            'transform' => true,
+            'client' => $client
+        ]);
         $payInvoiceList = $rest2->payInvoiceList([]);
 
         $this->assertEquals('a6761c8b-468f-40ad-a522-cc5e41c39757', $payInvoiceList[0]->id);

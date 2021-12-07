@@ -26,33 +26,37 @@ class RESTv2
     protected ?string $agent;
     protected ?string $affCode;
 
-    public function __construct(
-        string $apiKey = '',
-        string $apiSecret = '',
-        string $authToken = '',
-        string $apiUrl = 'https://api.bitfinex.com',
-        string $company = '',
-        bool $transform = false,
-        ?string $affCode = null,
-        ?string $agent = null,
-        ?Client $client = null
-    ) {
-        $this->apiUrl = $apiUrl;
-        $this->apiKey = $apiKey;
-        $this->apiSecret = $apiSecret;
-        $this->authToken =  $authToken;
-        $this->company = $company;
-        $this->transform = $transform;
-        $this->agent = $agent;
-        $this->affCode = $affCode;
+    /**
+     * @param array $params - Constructor params
+     *                        [
+     *                            'apiKey' => string,
+     *                            'apiSecret' => string,
+     *                            'authToken' => string,
+     *                            'apiUrl' => string,
+     *                            'company' => string,
+     *                            'transform' => bool,
+     *                            'affCode' => string,
+     *                            'agent' => string,
+     *                            'client' => Client
+     *                        ]
+     */
+    public function __construct($params)
+    {
+        $this->apiUrl = isset($params['apiUrl']) ? $params['apiUrl'] : 'https://api.bitfinex.com';
+        $this->apiKey = isset($params['apiKey']) ? $params['apiKey'] : '';
+        $this->apiSecret = isset($params['apiSecret']) ? $params['apiSecret'] : '';
+        $this->authToken = isset($params['authToken']) ? $params['authToken'] : '';
+        $this->company = isset($params['company']) ? $params['company'] : '';
+        $this->transform = isset($params['transform']) ? $params['transform'] : false;
+        $this->affCode = isset($params['affCode']) ? $params['affCode'] : null;
+        $this->agent = isset($params['agent']) ? $params['agent'] : null;
+        $this->client = isset($params['client']) ? $params['client'] : null;
 
-        if ($client === null) {
+        if ($this->client === null) {
             $this->client = new Client([
                 'base_uri' => $this->apiUrl,
                 'timeout' => 3.0,
             ]);
-        } else {
-            $this->client = $client;
         }
 
         if ($this->agent) {
