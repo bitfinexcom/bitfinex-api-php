@@ -64,7 +64,7 @@ class rest2Test extends TestCase
         );
 
         $rest2 = new RESTv2('test', 'test', '', '', '', true, null, null, $client);
-        $ledgers = $rest2->ledgers(null, null, 1569348774000, 1569348774009);
+        $ledgers = $rest2->ledgers(null, null, 1569348774000, 1569348774009)[0];
 
         $this->assertEquals('2531822314', $ledgers->getId());
         $this->assertEquals('USD', $ledgers->getCurrency());
