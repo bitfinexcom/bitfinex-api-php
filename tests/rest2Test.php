@@ -86,7 +86,7 @@ class rest2Test extends TestCase
         $keyPermission = $rest2->keyPermissions();
 
         $this->assertEquals('account', $keyPermission[0]->getKey());
-        $this->assertEquals(false, $keyPermission[0]->getRead());
+        $this->assertEquals(true, $keyPermission[0]->getRead());
         $this->assertEquals(false, $keyPermission[0]->getWrite());
     }
 
