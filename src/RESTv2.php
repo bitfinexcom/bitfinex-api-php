@@ -50,14 +50,12 @@ class RESTv2
         $this->transform = isset($params['transform']) ? $params['transform'] : false;
         $this->affCode = isset($params['affCode']) ? $params['affCode'] : null;
         $this->agent = isset($params['agent']) ? $params['agent'] : null;
-        $this->client = isset($params['client']) ? $params['client'] : null;
-
-        if ($this->client === null) {
-            $this->client = new Client([
+        $this->client = isset($params['client'])
+            ? $params['client']
+            : new Client([
                 'base_uri' => $this->apiUrl,
                 'timeout' => 3.0,
             ]);
-        }
 
         if ($this->agent) {
             $this->client->setUserAgent($this->agent);
