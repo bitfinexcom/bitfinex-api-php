@@ -1,0 +1,8 @@
+.idea
+vendor
+tools
+composer.phar
+composer.lock
+.php-cs-fixer.cache
+phpunit.xml
+index.php
