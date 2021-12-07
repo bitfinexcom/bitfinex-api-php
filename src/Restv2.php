@@ -215,7 +215,7 @@ class RESTv2
      * @param numeric $limit - query limit, default 25
      * @see https://docs.bitfinex.com/v2/reference#movements
      */
-    public function movements($ccy = null, $start = null, $end, $limit = 25)
+    public function movements($ccy = null, $start = null, $end = null, $limit = 25)
     {
         if (!$end) {
             $end = time() * 1000;
