@@ -87,7 +87,7 @@ class rest2Test extends TestCase
 
         $this->assertEquals('account', $keyPermission[0]->getKey());
         $this->assertEquals(true, $keyPermission[0]->getRead());
-        $this->assertEquals(false, $keyPermission[0]->getWrite());
+        $this->assertEquals(true, $keyPermission[0]->getWrite());
     }
 
     public function testGetDepositAddress()
