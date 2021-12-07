@@ -20,26 +20,26 @@ class UserInfoTest extends TestCase
 
     public function testId()
     {
-        $this->assertEquals(1, $this->user->getId());
+        $this->assertSame(1, $this->user->getId());
     }
 
     public function testUsername()
     {
-        $this->assertEquals('test', $this->user->getUsername());
+        $this->assertSame('test', $this->user->getUsername());
     }
 
     public function testEmail()
     {
-        $this->assertEquals('test@test.com', $this->user->getEmail());
+        $this->assertSame('test@test.com', $this->user->getEmail());
     }
 
     public function testTimezone()
     {
-        $this->assertEquals(2, $this->user->getTimezone());
+        $this->assertSame(2, $this->user->getTimezone());
     }
 
     public function testIspapertradeenabled()
     {
-        $this->assertEquals(1, $this->user->getIsPaperTradeEnabled());
+        $this->assertSame(1, $this->user->getIsPaperTradeEnabled());
     }
 }

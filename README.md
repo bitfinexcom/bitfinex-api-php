@@ -9,7 +9,13 @@
 ```bash
   composer require bitfinex-api-php
 ```
-### Docs
+
+## Testing
+```bash
+composer run-script test
+```
+
+## Docs
 
 Documentation at [https://docs.bitfinex.com/v2/reference](https://docs.bitfinex.com/v2/reference)
 

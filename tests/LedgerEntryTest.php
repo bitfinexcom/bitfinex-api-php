@@ -21,36 +21,36 @@ class LedgerEntryTest extends TestCase
 
     public function testId()
     {
-        $this->assertEquals(1, $this->ledger->getId());
+        $this->assertSame(1, $this->ledger->getId());
     }
 
     public function testCurrency()
     {
-        $this->assertEquals('ETH', $this->ledger->getCurrency());
+        $this->assertSame('ETH', $this->ledger->getCurrency());
     }
 
     public function testNts()
     {
-        $this->assertEquals(1573521810000, $this->ledger->getMts());
+        $this->assertSame(1573521810000, $this->ledger->getMts());
     }
 
     public function testAmount()
     {
-        $this->assertEquals(0.01644445, $this->ledger->getAmount());
+        $this->assertSame(0.01644445, $this->ledger->getAmount());
     }
 
     public function testBalance()
     {
-        $this->assertEquals(0, $this->ledger->getBalance());
+        $this->assertSame(0, $this->ledger->getBalance());
     }
 
     public function testDescription()
     {
-        $this->assertEquals('Settlement @ 185.79 on wallet margin', $this->ledger->getDescription());
+        $this->assertSame('Settlement @ 185.79 on wallet margin', $this->ledger->getDescription());
     }
 
     public function testGetWallet()
     {
-        $this->assertEquals('margin', $this->ledger->getWallet());
+        $this->assertSame('margin', $this->ledger->getWallet());
     }
 }

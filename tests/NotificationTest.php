@@ -27,17 +27,17 @@ class NotificationTest extends TestCase
 
     public function testMts()
     {
-        $this->assertEquals(1573521810000, $this->notification->getMts());
+        $this->assertSame(1573521810000, $this->notification->getMts());
     }
 
     public function testType()
     {
-        $this->assertEquals('fon-req', $this->notification->getType());
+        $this->assertSame('fon-req', $this->notification->getType());
     }
 
     public function testMessageId()
     {
-        $this->assertEquals(1, $this->notification->getMessageID());
+        $this->assertSame(1, $this->notification->getMessageID());
     }
 
     public function testNotifyInfo()
@@ -52,16 +52,16 @@ class NotificationTest extends TestCase
 
     public function testCode()
     {
-        $this->assertEquals(null, $this->notification->getCode());
+        $this->assertSame(null, $this->notification->getCode());
     }
 
     public function testStatus()
     {
-        $this->assertEquals('SUCCESS', $this->notification->getStatus());
+        $this->assertSame('SUCCESS', $this->notification->getStatus());
     }
 
     public function testText()
     {
-        $this->assertEquals('Submitting funding bid of 1000.0 USD at 0.2000 for 2 days.', $this->notification->getText());
+        $this->assertSame('Submitting funding bid of 1000.0 USD at 0.2000 for 2 days.', $this->notification->getText());
     }
 }

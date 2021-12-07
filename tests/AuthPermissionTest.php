@@ -19,11 +19,11 @@ class AuthPermissionTest extends TestCase
 
     public function testRead()
     {
-        $this->assertEquals(true, $this->authpermission->getRead());
+        $this->assertSame(true, $this->authpermission->getRead());
     }
 
     public function testWrite()
     {
-        $this->assertEquals(false, $this->authpermission->getWrite());
+        $this->assertSame(false, $this->authpermission->getWrite());
     }
 }
