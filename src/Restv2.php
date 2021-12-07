@@ -239,7 +239,7 @@ class RESTv2
      * @param numeric $limit - query limit, default 25
      * @see https://docs.bitfinex.com/v2/reference#ledgers
      */
-    public function ledgers($category = null, $ccy = null, $start = null, $end, $limit = 25)
+    public function ledgers($category = null, $ccy = null, $start = null, $end = null, $limit = 25)
     {
         if (!$end) {
             $end = time() * 1000;
