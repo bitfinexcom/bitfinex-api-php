@@ -176,5 +176,4 @@ class rest2Test extends TestCase
         $handlerStack->push($history);
         return new Client(['handler' => $handlerStack]);
     }
-
 }
