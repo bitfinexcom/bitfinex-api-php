@@ -34,17 +34,17 @@ class MovementTest extends TestCase
         $this->assertSame('ETH', $this->movement->getCurrency());
     }
 
-    public function testCurrencyname()
+    public function testCurrencyName()
     {
         $this->assertSame('ETHEREUM', $this->movement->getCurrencyName());
     }
 
-    public function testMtsstarted()
+    public function testMtsStarted()
     {
         $this->assertSame(1569348774000, $this->movement->getMtsStarted());
     }
 
-    public function testMtsupdated()
+    public function testMtsUpdated()
     {
         $this->assertSame(1569348774000, $this->movement->getMtsUpdated());
     }
@@ -64,12 +64,12 @@ class MovementTest extends TestCase
         $this->assertSame(-0.00135, $this->movement->getFees());
     }
 
-    public function testDestinationaddress()
+    public function testDestinationAddress()
     {
         $this->assertSame('Address', $this->movement->getDestinationAddress());
     }
 
-    public function testTransactionid()
+    public function testTransactionId()
     {
         $this->assertSame(25, $this->movement->getTransactionId());
     }

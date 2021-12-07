@@ -38,8 +38,8 @@ class UserInfoTest extends TestCase
         $this->assertSame(2, $this->user->getTimezone());
     }
 
-    public function testIspapertradeenabled()
+    public function testIsPaperTradeEnabled()
     {
-        $this->assertSame(1, $this->user->getIsPaperTradeEnabled());
+        $this->assertSame(true, $this->user->getIsPaperTradeEnabled());
     }
 }

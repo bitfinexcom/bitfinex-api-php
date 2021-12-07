@@ -9,10 +9,12 @@ class AuthPermission
     protected $write;
 
     /**
-     * @param object $data - auth permission data
-     * @param string $data.key - operation key
-     * @param boolean $data.read - read permission
-     * @param boolean $data.write - write permission
+     * @param array $data - auth permission data
+     *                      [
+     *                          'key' => string - operation key
+     *                          'read' => number - read permission
+     *                          'write' => number - write permission
+     *                      ]
      */
     public function __construct($data = [])
     {
@@ -22,7 +24,14 @@ class AuthPermission
     }
 
     /**
-     * @param object$data - data to convert to POJO
+     * @param array $data - data to convert to POJO
+     *                      [
+     *                          'key' => string - operation key
+     *                          'read' => number - read permission
+     *                          'write' => number - write permission
+     *                      ]
+     *
+     * @return AuthPermission
      */
     public static function unserialize($data)
     {
@@ -30,7 +39,7 @@ class AuthPermission
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getKey()
     {
@@ -38,7 +47,7 @@ class AuthPermission
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function getRead()
     {
@@ -46,7 +55,7 @@ class AuthPermission
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function getWrite()
     {

@@ -17,18 +17,20 @@ class Movement
     protected $note;
 
     /**
-     * @param object $data - movement data
-     * @param numeric $data['id'] - id
-     * @param string $data['currency'] - currency
-     * @param string $data['currencyName'] - currency name
-     * @param numeric $data['mtsStarted'] - movement start timestamp
-     * @param numeric $data['mtsUpdated'] - last update timestamp
-     * @param string $data['status'] - status
-     * @param numeric $data['amount'] - moved amount
-     * @param numeric $data['fees'] - paid fees
-     * @param string $data['destinationAddress'] - destination address
-     * @param numeric $data['transactionId'] - transaction ID
-     * @param string $data['note'] - note
+     * @param array $data - movement data
+     *                      [
+     *                          'id' => int - id
+     *                          'currency' => string - currency
+     *                          'currencyName' => string - currency name
+     *                          'mtsStarted' => int - movement start timestamp
+     *                          'mtsUpdated' => int - last update timestamp
+     *                          'status' => string - status
+     *                          'amount' => float - moved amount
+     *                          'fees' => float - paid fees
+     *                          'destinationAddress' => string - destination address
+     *                          'transactionId' => int - transaction ID
+     *                          'note' => string - note
+     *                      ]
      */
     public function __construct($data = [])
     {
@@ -46,7 +48,22 @@ class Movement
     }
 
     /**
-     * @param object $data - data to convert to POJO
+     * @param array $data - data to convert to POJO
+     *                      [
+     *                          'id' => int - id
+     *                          'currency' => string - currency
+     *                          'currencyName' => string - currency name
+     *                          'mtsStarted' => int - movement start timestamp
+     *                          'mtsUpdated' => int - last update timestamp
+     *                          'status' => string - status
+     *                          'amount' => float - moved amount
+     *                          'fees' => float - paid fees
+     *                          'destinationAddress' => string - destination address
+     *                          'transactionId' => int - transaction ID
+     *                          'note' => string|null - note
+     *                      ]
+     *
+     * @return Movement
      */
     public static function unserialize($data)
     {
@@ -54,7 +71,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -62,7 +79,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCurrency()
     {
@@ -70,7 +87,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCurrencyName()
     {
@@ -78,7 +95,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getMtsStarted()
     {
@@ -86,7 +103,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getMtsUpdated()
     {
@@ -94,7 +111,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getStatus()
     {
@@ -102,7 +119,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getAmount()
     {
@@ -110,7 +127,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getFees()
     {
@@ -118,7 +135,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getDestinationAddress()
     {
@@ -126,7 +143,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getTransactionId()
     {
@@ -134,7 +151,7 @@ class Movement
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getNote()
     {

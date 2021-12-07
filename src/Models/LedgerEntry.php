@@ -13,13 +13,15 @@ class LedgerEntry
     protected $wallet;
 
     /**
-     * @param object data - ledger entry data
-     * @param numeric $data['id'] - id
-     * @param string $data['currency'] - currency
-     * @param numeric $data['mts'] - transaction timestamp
-     * @param numeric $ata['amount'] - transaction amount
-     * @param numeric $data['balance'] - balance at time of transaction
-     * @param string $data['description'] - transaction description
+     * @param array $data - ledger entry data
+     *                      [
+     *                          'id' => int - id
+     *                          'currency' => string - currency
+     *                          'mts' => int - transaction timestamp
+     *                          'amount' => float - transaction amount
+     *                          'balance' => float - balance at time of transaction
+     *                          'description' => string - transaction description
+     *                      ]
      */
     public function __construct($data = [])
     {
@@ -38,7 +40,17 @@ class LedgerEntry
     }
 
     /**
-     * @param object $data - data to convert to POJO
+     * @param array $data - data to convert to POJO
+     *                      [
+     *                          'id' => int - id
+     *                          'currency' => string - currency
+     *                          'mts' => int - transaction timestamp
+     *                          'amount' => float - transaction amount
+     *                          'balance' => float - balance at time of transaction
+     *                          'description' => string - transaction description
+     *                      ]
+     *
+     * @return LedgerEntry
      */
     public static function unserialize($data)
     {
@@ -46,7 +58,7 @@ class LedgerEntry
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -54,7 +66,7 @@ class LedgerEntry
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCurrency()
     {
@@ -62,7 +74,7 @@ class LedgerEntry
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getMts()
     {
@@ -70,7 +82,7 @@ class LedgerEntry
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getAmount()
     {
@@ -78,7 +90,7 @@ class LedgerEntry
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getBalance()
     {
@@ -86,7 +98,7 @@ class LedgerEntry
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getDescription()
     {
@@ -94,7 +106,7 @@ class LedgerEntry
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getWallet()
     {

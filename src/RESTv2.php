@@ -61,13 +61,11 @@ class RESTv2
     }
 
     /**
-     * @param string $path    - Api endpoint
-     * @param mixed $payload - Request body
-     * @param mixed $transformer - Response transform function
      * @param string $path - path
-     * @return mixed
+     * @param array $payload - payload
+     * @param callable|string $transformer - model class or function
      *
-     * @throws \Exception
+     * @return mixed
      */
     public function makeAuthRequest(string $path, $payload, $transformer = null)
     {
@@ -107,9 +105,8 @@ class RESTv2
     }
 
     /**
-     * @param string $path - Api endpoint
-     * @param mixed  $payload - Request body
-     * @param mixed $transformer - Response transform function
+     * @param string $path - path
+     * @param callable|string $transformer - model class or function
      *
      * @return mixed
      */
@@ -123,9 +120,9 @@ class RESTv2
     }
 
     /**
-     * @param string $path - Api endpoint
-     * @param mixed $transformer - Response transform function
-     * @param mixed $body - Request body
+     * @param string $path - path
+     * @param array $body - payload
+     * @param callable|string $transformer - model class or function
      *
      * @return mixed
      */
@@ -147,8 +144,10 @@ class RESTv2
     }
 
     /**
-     * @param object $data - data
-     * @param mixed $transformer - Response transform function
+     * @param mixed $data - data
+     * @param callable|string $transformer - model class or function
+     *
+     * @return mixed
      */
     protected function response($data, $transformer)
     {
@@ -156,8 +155,10 @@ class RESTv2
     }
 
     /**
-     * @param object $data - data
-     * @param mixed $transformer - Response transform function
+     * @param mixed $data - data
+     * @param callable|string $transformer - model class or function
+     *
+     * @return mixed
      */
     protected function doTransform($data, $transformer)
     {
@@ -171,8 +172,10 @@ class RESTv2
     }
 
     /**
-     * @param object $data - data
-     * @param mixed $transformer - Response transform function
+     * @param mixed $data - data
+     * @param string $transformer - model class or function
+     *
+     * @return mixed
      */
     protected function classTransform($data, $transformer)
     {
@@ -194,6 +197,8 @@ class RESTv2
 
     /**
      * @see https://docs.bitfinex.com/v2/reference#rest-public-platform-status
+     *
+     * @return int[]
      */
     public function status()
     {
@@ -202,6 +207,8 @@ class RESTv2
 
     /**
      * @see https://docs.bitfinex.com/reference#rest-auth-info-user
+     *
+     * @return array|UserInfo
      */
     public function userInfo()
     {
@@ -209,11 +216,14 @@ class RESTv2
     }
 
     /**
-     * @param string $ccy - i.e. ETH
-     * @param numeric $start - query start
-     * @param numeric $end - query end
-     * @param numeric $limit - query limit, default 25
      * @see https://docs.bitfinex.com/v2/reference#movements
+     *
+     * @param string $ccy - i.e. ETH
+     * @param int $start - query start
+     * @param int $end - query end
+     * @param int $limit - query limit, default 25
+     *
+     * @return array|Movement[]
      */
     public function movements($ccy = null, $start = null, $end = null, $limit = 25)
     {
@@ -232,12 +242,15 @@ class RESTv2
     }
 
     /**
-     * @param $category - category
-     * @param string $ccy - i.e. ETH
-     * @param numeric $start - query start
-     * @param numeric $end - query end
-     * @param numeric $limit - query limit, default 25
      * @see https://docs.bitfinex.com/v2/reference#ledgers
+     *
+     * @param string $category - category
+     * @param string $ccy - i.e. ETH
+     * @param int $start - query start
+     * @param int $end - query end
+     * @param int $limit - query limit, default 25
+     *
+     * @return array|LedgerEntry[]
      */
     public function ledgers($category = null, $ccy = null, $start = null, $end = null, $limit = 25)
     {
@@ -257,7 +270,9 @@ class RESTv2
     }
 
     /**
-     * Fetch the permissions of the key or token being used to generate this request
+     * @see https://docs.bitfinex.com/reference#key-permissions
+     *
+     * @return array|AuthPermission[]
      */
     public function keyPermissions()
     {
@@ -265,14 +280,18 @@ class RESTv2
     }
 
     /**
-     * @param object $opts - options
-     * @param numeric $opts [ttl] - time-to-live in seconds
-     * @param string $opts [scope] - scope of the token
-     * @param string $opts [caps] - token caps/permissions
-     * @param boolean $opts [writePermission] - token write permission
-     * @param string $opts [_cust_ip] - user ip address
-     * @return mixed
-     * @throws \Exception
+     * @see https://docs.bitfinex.com/reference#generate-token
+     *
+     * @param array $opts - options, associative array:
+     *                      [
+     *                          'ttl' => int - optional, time-to-live in seconds
+     *                          'scope' => string - scope of the token
+     *                          'caps' => string - optional, token caps/permissions
+     *                          'writePermission' => boolean - optional, token write permission
+     *                          '_cust_ip' => string - optional, user ip address
+     *                      ]
+     *
+     * @return string[]
      */
     public function generateToken($opts)
     {
@@ -294,10 +313,16 @@ class RESTv2
     }
 
     /**
-     * @param object $params - parameters
-     * @param string $params [wallet]  - wallet i.e exchange, margin
-     * @param string $params [method]  - protocol method i.e bitcoin, tetherus
-     * @param numeric $params [opRenew] - if 1 then generates a new address
+     * @see https://docs.bitfinex.com/reference#rest-auth-deposit-address
+     *
+     * @param array $params - parameters
+     *                        [
+     *                            'wallet' => string - wallet i.e exchange, margin
+     *                            'method' => string - protocol method i.e bitcoin, tetherus
+     *                            'opRenew' => int - if 1 then generates a new address
+     *                        ]
+     *
+     * @return array|Notification
      */
     public function getDepositAddress($params)
     {
@@ -306,11 +331,17 @@ class RESTv2
     }
 
     /**
+     * @see https://docs.bitfinex.com/reference#rest-auth-withdraw
+     *
      * @param object $params - parameters
-     * @param string $params [wallet]  - wallet i.e exchange, margin
-     * @param string $params [method]  - protocol method i.e bitcoin, tetherus
-     * @param numeric $params [amount]  - amount to withdraw
-     * @param string $params [address] - destination address
+     *                         [
+     *                             'wallet' => string - wallet i.e exchange, margin
+     *                             'method' => string - protocol method i.e bitcoin, tetherus
+     *                             'amount' => string|float - amount to withdraw
+     *                             'address' => string - destination address
+     *                         ]
+     *
+     * @return array|Notification
      */
     public function withdraw($params)
     {
@@ -318,34 +349,32 @@ class RESTv2
     }
 
     /**
-     * @param object $params                                - invoice parameters
-     * @param string $params [amount]                       - invoice amount in currency
-     * @param string $params [currency]                     - invoice currency, currently supported: USD
-     * @param string $params [payCurrencies]                - currencies in which invoice accepts the payments, supported
-     *                                                 values are: BTC, ETH, UST-ETH, LNX
-     * @param numeric $params [duration]                     - optional, invoice expire time in seconds, minimal duration
-     *                                                 is 5 mins and maximal duration is 24 hours.
-     *                                                 Default value is 15 minutes
-     * @param string $params [orderId]                      - reference order identifier in merchant's platform
-     * @param string $params [webhook]                      - the endpoint that will be called once the payment is
-     *                                                 completed or expired
-     * @param string $params [redirectUrl]                  - merchant redirect URL, this one is used in UI to redirect
-     *                                                 customer to merchant's site once the payment is completed
-     *                                                 or expired
-     * @param object $params [customerInfo]                 - informatiturn $this->response(json_decode(on related to customer
-     *                                                 against who the invoice is issued
-     * @param string $params [customerInfo.nationality]     - customer's nationality, alpha2 code or full country name
-     *                                                 (alpha2 preffered)
-     * @param string $params [customerInfo.residCountry]    - customer's residential country, alpha2 code or
-     *                                                 full country name (alpha2 preffered)
-     * @param string $params [customerInfo.residState]      - optional, customer's residential state/province
-     * @param string $params [customerInfo.residCity]       - customer's residential city/town
-     * @param string $params [customerInfo.residZipCode]    - customer's residential zip code/postal code
-     * @param string $params [customerInfo.residStreet]     - customer's residential street address
-     * @param string $params [customerInfo.residBuildingNo] - optional, customer's residential building number/name
-     * @param string $params [customerInfo.fullName]        - customer's full name
-     * @param string $params [customerInfo.email]           - customer's email address
      * @see https://docs.bitfinex.com/reference#submit-invoice
+     *
+     * @param array $params - invoice parameters
+     *                        [
+     *                            'amount' => string - invoice amount in currency
+     *                            'currency' => string - invoice currency, currently supported: USD
+     *                            'payCurrencies' => string - currencies in which invoice accepts the payments, supported values are: BTC, ETH, UST-ETH, LNX
+     *                            'duration' => int - optional, invoice expire time in seconds, minimal duration is 5 mins and maximal duration is 24 hours. Default value is 15 minutes
+     *                            'orderId' => string - reference order identifier in merchant's platform
+     *                            'webhook' => string - the endpoint that will be called once the payment is completed or expired
+     *                            'redirectUrl' => string - merchant redirect URL, this one is used in UI to redirect customer to merchant's site once the payment is completed or expired
+     *                            'customerInfo' => array - informatiturn $this->response(json_decode(on related to customer against who the invoice is issued
+     *                                                      [
+     *                                                          'nationality' => string - customer's nationality, alpha2 code or full country name (alpha2 preffered)
+     *                                                          'residCountry' => string - customer's residential country, alpha2 code or full country name (alpha2 preffered)
+     *                                                          'residState' => string - optional, customer's residential state/province
+     *                                                          'residCity' => string - customer's residential city/town
+     *                                                          'residZipCode' => string - customer's residential zip code/postal code
+     *                                                          'residStreet' => string - customer's residential street address
+     *                                                          'residBuildingNo' => string - optional, customer's residential building number/name
+     *                                                          'fullName' => string - customer's full name
+     *                                                          'email' => string - customer's email address
+     *                                                      ]
+     *                        ]
+     *
+     * @return object
      */
     public function payInvoiceCreate($params)
     {
@@ -353,12 +382,17 @@ class RESTv2
     }
 
     /**
-     * @param object $params - query parameters
-     * @param string $params [id]    - unique invoice identifier
-     * @param numeric $params [start] - millisecond start time
-     * @param numeric $params [end]   - millisecond end time
-     * @param numeric $params [limit] - number of records (Max 100), default 10
      * @see https://docs.bitfinex.com/reference#invoice-list
+     *
+     * @param array $params - query parameters
+     *                        [
+     *                            'id' => string - unique invoice identifier
+     *                            'start' => int - millisecond start time
+     *                            'end' => int - millisecond end time
+     *                            'limit' => int - number of records (Max 100), default 10
+     *                        ]
+     *
+     * @return object[]
      */
     public function payInvoiceList($params)
     {

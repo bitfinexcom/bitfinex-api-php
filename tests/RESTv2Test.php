@@ -8,7 +8,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
-class rest2Test extends TestCase
+class RESTv2Test extends TestCase
 {
     public function testGetStatus()
     {

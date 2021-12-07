@@ -14,12 +14,14 @@ class UserInfo
     protected $isPaperTradeEnabled;
 
     /**
-     * @param object $data - user info data
-     * @param numeric $data['id'] - id
-     * @param string $data['email'] - email
-     * @param string $data['username'] - username
-     * @param numeric $data['timezone'] - timezone as UTC offset
-     * @param numeric $data['isPaperTradeEnabled'] - flag indicating paper trading account
+     * @param array $data - user info data
+     *                      [
+     *                          'id' => int - id
+     *                          'email' => string - email
+     *                          'username' => string - username
+     *                          'timezone' => int - timezone as UTC offset
+     *                          'isPaperTradeEnabled' => int - flag indicating paper trading account
+     *                      ]
      */
     public function __construct($data = [])
     {
@@ -27,11 +29,20 @@ class UserInfo
         $this->email = $data[1];
         $this->username = $data[2];
         $this->timezone = $data[7];
-        $this->isPaperTradeEnabled = $data[21];
+        $this->isPaperTradeEnabled = $data[21] === 1;
     }
 
     /**
-     * @param object $data - data to convert to POJO
+     * @param array $data - data to convert to POJO
+     *                      [
+     *                          'id' => int - id
+     *                          'email' => string - email
+     *                          'username' => string - username
+     *                          'timezone' => int - timezone as UTC offset
+     *                          'isPaperTradeEnabled' => int - flag indicating paper trading account
+     *                      ]
+     *
+     * @return UserInfo
      */
     public static function unserialize($data)
     {
@@ -39,7 +50,7 @@ class UserInfo
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -47,7 +58,7 @@ class UserInfo
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmail()
     {
@@ -55,7 +66,7 @@ class UserInfo
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUsername()
     {
@@ -63,7 +74,7 @@ class UserInfo
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getTimezone()
     {
@@ -71,7 +82,7 @@ class UserInfo
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function getIsPaperTradeEnabled()
     {
