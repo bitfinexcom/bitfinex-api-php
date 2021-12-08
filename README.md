@@ -7,13 +7,13 @@
 
 ## Installation
 ```bash
-  composer require bitfinex-api-php
+composer require bitfinex/api-rest
 ```
 
 ## Usage
 
 ```php
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
 use BFX\RESTv2;
 
