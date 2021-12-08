@@ -1,5 +1,5 @@
 {
-    "name": "bfx/api-rest",
+    "name": "bitfinex/api-rest",
     "description": "Official Bitfinex REST v2 API interface",
     "keywords": [
         "bitfinex",
